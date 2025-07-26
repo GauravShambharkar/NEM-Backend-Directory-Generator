@@ -50,7 +50,7 @@ function App() {
   function removeControllerField(indexToRemove: number) {
     if (controllerNames.length > 1) {
       const newList = controllerNames.filter(
-        (item: string, index: number) => index !== indexToRemove
+        (item: String, index: number) => index !== indexToRemove
       );
       setControllerNames(newList);
     }
@@ -60,7 +60,7 @@ function App() {
   function removeMiddlewareField(indexToRemove: number) {
     if (middlewareNames.length > 1) {
       const newList = middlewareNames.filter(
-        (item: string, index: number) => index !== indexToRemove
+        (item: String, index: number) => index !== indexToRemove
       );
       setMiddlewareNames(newList);
     }
@@ -70,7 +70,7 @@ function App() {
   function removeModelField(indexToRemove: number) {
     if (modelNames.length > 1) {
       const newList = modelNames.filter(
-        (item: string, index: number) => index !== indexToRemove
+        (item: String, index: number) => index !== indexToRemove
       );
       setModelNames(newList);
     }
@@ -80,7 +80,7 @@ function App() {
   function removeRouteField(indexToRemove: number) {
     if (routeNames.length > 1) {
       const newList = routeNames.filter(
-        (item: string, index: number) => index !== indexToRemove
+        (item: String, index: number) => index !== indexToRemove
       );
       setRouteNames(newList);
     }
@@ -90,7 +90,7 @@ function App() {
   function removeSchemaField(indexToRemove: number) {
     if (schemaNames.length > 1) {
       const newList = schemaNames.filter(
-        (item: string, index: number) => index !== indexToRemove
+        (item: String, index: number) => index !== indexToRemove
       );
       setSchemaNames(newList);
     }
@@ -100,7 +100,7 @@ function App() {
   function removeUtilField(indexToRemove: number) {
     if (utilNames.length > 1) {
       const newList = utilNames.filter(
-        (item: string, index: number) => index !== indexToRemove
+        (item: String, index: number) => index !== indexToRemove //1 !== 1 false, if condition runs, filter only accept the false condition
       );
       setUtilNames(newList);
     }
@@ -199,8 +199,9 @@ function App() {
                 </label>
               </div>
               <div className="space-y-2">
+                {/* controller input field */}
                 {controllerNames.map((name, index) => (
-                  <div key={index} className="flex items-center gap-2">
+                  <div key={index} className="flex border items-center gap-2">
                     <input
                       type="text"
                       value={name}
