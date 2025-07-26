@@ -1,41 +1,66 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const fs = require("fs-extra");
+const fs = require("fs");
 const path = require("path");
-const archiver = require("archiver");
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+const generateFiles = ({
+  tempDir,
+  controllerName,
+  middlewareName,
+  modelName,
+  routeName,
+  schemaName,
+  utilName,
+}) => {
+  const templates = {
+    controller: (name) =>
+      `exports.${name} = (req, res) => {\n  res.send("${name} controller working");\n};`,
 
-const { generateFiles } = require("./routes/generate");
+    middleware: (name) =>
+      `module.exports = (req, res, next) => {\n  console.log("${name} middleware running");\n  next();\n};`,
 
-app.post("/generate", async (req, res) => {
-  const { controllerName, middlewareName, modelName, routeName, schemaName, utilName } = req.body;
+    model: (name, schema) =>
+      `const mongoose = require("mongoose");\n\nconst ${schema} = new mongoose.Schema({\n  name: String\n});\n\nmodule.exports = mongoose.model("${name}", ${schema});`,
 
-  const timeTag = Date.now();
-  const tempDir = path.join(__dirname, `../output/backend-${timeTag}`);
-  const zipPath = path.join(__dirname, `../output/backend-${timeTag}.zip`);
+    route: (name) =>
+      `const express = require("express");\nconst router = express.Router();\nconst { ${name} } = require("../controllers/${name}Controller");\n\nrouter.get("/", ${name});\n\n module.exports = router;`,
 
-  try {
-    await fs.copy(path.join(__dirname, "../template"), tempDir);
+    util: (name) =>
+      `// ${name} utility function\nmodule.exports = () => {\n  console.log("${name} util called");\n};`,
+  };
 
-    generateFiles({ tempDir, controllerName, middlewareName, modelName, routeName, schemaName, utilName });
-
-    const output = fs.createWriteStream(zipPath);
-    const archive = archiver("zip");
-    archive.pipe(output);
-    archive.directory(tempDir, false);
-    await archive.finalize();
-
-    output.on("close", () => {
-      res.download(zipPath, "backend.zip");
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Failed to generate backend.");
+  if (controllerName) {
+    fs.writeFileSync(
+      path.join(tempDir, "controllers", `${controllerName}Controller.js`),
+      templates.controller(controllerName)
+    );
   }
-});
 
-app.listen(4000, () => console.log("Backend server running on port 4000"));
+  if (middlewareName) {
+    fs.writeFileSync(
+      path.join(tempDir, "middlewares", `${middlewareName}Middleware.js`),
+      templates.middleware(middlewareName)
+    );
+  }
+
+  if (modelName && schemaName) {
+    fs.writeFileSync(
+      path.join(tempDir, "models", `${modelName}Model.js`),
+      templates.model(modelName, schemaName)
+    );
+  }
+
+  if (routeName) {
+    fs.writeFileSync(
+      path.join(tempDir, "routes", `${routeName}Routes.js`),
+      templates.route(routeName)
+    );
+  }
+
+  if (utilName) {
+    fs.writeFileSync(
+      path.join(tempDir, "utils", `${utilName}.js`),
+      templates.util(utilName)
+    );
+  }
+};
+
+module.exports = { generateFiles };

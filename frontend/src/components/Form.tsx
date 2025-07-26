@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Trash2, Download, Code } from "lucide-react";
+import axios from "axios";
 
 function App() {
   // Start with one empty field for each type
@@ -174,11 +175,19 @@ function App() {
     document.body.removeChild(downloadLink);
   }
 
+  const handleformSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    await axios.post('http://localhost:3000/api/generate', controllerNames)
+  }
+
+  
+
   return (
     <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Title */}
-        <div className="text-center mb-8">
+        <div className="text-center  mb-8">
           <h1 className="text-3xl font-bold text-black mb-2">
             Backend Generator
           </h1>
@@ -188,8 +197,8 @@ function App() {
         </div>
 
         {/* Main Form */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="space-y-6">
+        <form onSubmit={handleformSubmit} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="space-y-6 ">
             {/* Controller Section */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
@@ -201,7 +210,7 @@ function App() {
               <div className="space-y-2">
                 {/* controller input field */}
                 {controllerNames.map((name, index) => (
-                  <div key={index} className="flex border items-center gap-2">
+                  <div key={index} className="flex  items-center gap-2">
                     <input
                       type="text"
                       value={name}
@@ -455,7 +464,7 @@ function App() {
               </button>
             </div>
           </div>
-        </div>
+        </form>
 
         <div className="text-center mt-6 text-sm text-gray-500">
           Configure your backend components and download the generated structure
