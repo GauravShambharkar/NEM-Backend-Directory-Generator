@@ -13,6 +13,12 @@ function App() {
   const [utilNames, setUtilNames] = useState([""]);
 
   // Function to add a new controller field
+
+  function addDirectory() {
+    const newList = [...directoryName, ""];
+    setDirectoryName(newList);
+  }
+
   function addControllerField() {
     const newList = [...controllerNames, ""];
     setControllerNames(newList);
@@ -154,6 +160,7 @@ function App() {
   function generateBackend() {
     // Collect all the data
     const allData = {
+      directory: directoryName.filter((name) => name.trim() !== ""),
       controllers: controllerNames.filter((name) => name.trim() !== ""),
       middlewares: middlewareNames.filter((name) => name.trim() !== ""),
       models: modelNames.filter((name) => name.trim() !== ""),
@@ -179,10 +186,16 @@ function App() {
   const handleformSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await axios.post('http://localhost:3000/api/generate', controllerNames)
-  }
-
-  
+    await axios.post("http://localhost:3000/api/generate", {
+      directoryName,
+      controllerNames,
+      middlewareNames,
+      modelNames,
+      routeNames,
+      schemaNames,
+      utilNames,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-white py-8 px-4">
@@ -198,8 +211,36 @@ function App() {
         </div>
 
         {/* Main Form */}
-        <form onSubmit={handleformSubmit} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <form
+          onSubmit={handleformSubmit}
+          className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+        >
           <div className="space-y-6 ">
+            {/* directory secction */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Code className="w-4 h-4 text-gray-600" />
+                <label className="text-sm font-medium text-black">
+                  Root Directory Name
+                </label>
+              </div>
+              <div className="space-y-2">
+                {/* directory input field */}
+
+                <div className="flex  items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Enter root direcotory name..."
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
+                                 placeholder:text-gray-400 focus:outline-none focus:ring-2 
+                                 focus:ring-black focus:border-black transition-colors"
+                  />
+                </div>
+              </div>
+            </div>
+
+            
+
             {/* Controller Section */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
