@@ -30,6 +30,12 @@ generateRoute.post("/generate", async (req, res) => {
 
   try {
     const archive = archiver("zip", { zlib: { level: 9 } });
+    // archive.pipe(res);
+
+    res.set({
+      "Content-Type": "application/zip",
+      "Content-Disposition": `attachment; filename=${directoryName}.zip`,
+    });
 
     const output = fs.createWriteStream(__dirname + `/${directoryName}.zip`);
     archive.pipe(output);
@@ -94,7 +100,7 @@ generateRoute.post("/generate", async (req, res) => {
     });
 
     // node_modules content
-     archive.directory(nodeModulesPath, `${folderName}/node_modules`);
+    archive.directory(nodeModulesPath, `${folderName}/node_modules`);
     const nodeModuleDir = path.join(__dirname, "node_modules");
     archive.directory(nodeModuleDir, `${directoryName}/node_modules`);
 
@@ -102,6 +108,7 @@ generateRoute.post("/generate", async (req, res) => {
       path.join(__dirname, "../readBackend/config.js")
     );
     archive.append(config_fileContent, { name: `${directoryName}/config.js` });
+
     await archive.finalize();
   } catch (err) {
     console.error("Error generating ZIP file:", err);

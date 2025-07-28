@@ -3,9 +3,9 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 // import getPort from "get-port";
-const { databaseString } = require("./config");
+const {  } = require("./config");
 
-mongoose.connect(databaseString);
+mongoose.connect();
 
 var corsOptions = {
   origin: ["http://localhost:5173"],
