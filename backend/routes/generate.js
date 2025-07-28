@@ -79,12 +79,21 @@ app.post("/generate", async (req, res) => {
     const package_jsonContent = fs.readFileSync(
       path.join(__dirname, "../readBackend/package.json")
     );
-    archive.append(package_jsonContent, {name: `${directoryName}/package.json`});
+    archive.append(package_jsonContent, {
+      name: `${directoryName}/package.json`,
+    });
 
     // package-lock.json content
     const package_lock_jsonContent = fs.readFileSync(
       path.join(__dirname, "../readBackend/package-lock.json")
-    );archive.append(package_lock_jsonContent,{name: `${directoryName}/package-lock.json`} )
+    );
+    archive.append(package_lock_jsonContent, {
+      name: `${directoryName}/package-lock.json`,
+    });
+
+    // node_modules content
+    const nodeModuleDir = path.join(__dirname, "node_modules");
+    archive.directory(nodeModuleDir, `${directoryName}/node_modules`);
 
     await archive.finalize();
   } catch (err) {
