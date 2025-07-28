@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { generateRoute } = require("./routes/generate");
+const { generateRoute } = require("../backend/routes/generate");
 const app = express();
 
 const corsOption = {
@@ -13,6 +13,7 @@ app.use(cors(corsOption));
 app.use(express.json());
 
 app.use("/", generateRoute);
+
 
 const port = process.env.PORT || 3000;
 

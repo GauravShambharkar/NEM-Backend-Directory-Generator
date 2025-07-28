@@ -1,7 +1,6 @@
 const fs = require("fs-extra");
 const path = require("path");
 const archiver = require("archiver");
-
 const { Router } = require("express");
 const generateRoute = Router();
 
@@ -25,10 +24,7 @@ generateRoute.post("/generate", async (req, res) => {
   try {
     const archive = archiver("zip", { zlib: { level: 9 } });
 
-    res.set({
-      "Content-Type": "application/zip",
-      "Content-Disposition": `attachment; filename=${directoryName}.zip`,
-    });
+    res.attachment(`${directoryName}.zip`);
 
     // Pipe the archive directly to the response only
     archive.pipe(res);

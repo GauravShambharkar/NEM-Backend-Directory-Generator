@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Download, Code, Plus, Trash2, Loader2 } from "lucide-react";
 import axios from "axios";
+import { saveAs } from "file-saver";
 
 function App() {
   // Root directory remains single field
@@ -163,15 +164,10 @@ function App() {
         }
       );
 
+      
+
       // Create download link
-      const url = window.URL.createObjectURL(response.data);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${directoryName}.zip`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      saveAs(response.data, `${directoryName}.zip`);
 
       // alert("Backend generated successfully! Check your downloads folder.");
     } catch (error) {
