@@ -1,5 +1,5 @@
 const { default: axios } = require("axios");
-const { userModel } = require("../Models/db");
+const { userModel } = require("../Models/model");
 const bcrypt = require("bcrypt");
 const { user_jwt_secret } = require("../config");
 const { generate_UserToken } = require("../utils");
@@ -44,7 +44,7 @@ const user_jwtValid = (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const {  } = req.body;
+  const {} = req.body;
 
   const user = await userModel.findOne({});
   if (user) {
@@ -63,7 +63,6 @@ const deleteUser = async (req, res) => {
     msg: "",
   });
 };
-
 
 module.exports = {
   registerUser,

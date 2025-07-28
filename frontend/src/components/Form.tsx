@@ -1,207 +1,171 @@
 import { useState } from "react";
-import { Plus, Trash2, Download, Code } from "lucide-react";
+import { Download, Code, Plus, Trash2, Loader2 } from "lucide-react";
 import axios from "axios";
 
 function App() {
-  // Start with one empty field for each type
-  const [directoryName, setDirectoryName] = useState([""]);
+  // Root directory remains single field
+  const [directoryName, setDirectoryName] = useState("");
+
+  // Arrays for multiple fields
   const [controllerNames, setControllerNames] = useState([""]);
   const [middlewareNames, setMiddlewareNames] = useState([""]);
   const [modelNames, setModelNames] = useState([""]);
-  const [routeNames, setRouteNames] = useState([""]);
   const [schemaNames, setSchemaNames] = useState([""]);
   const [utilNames, setUtilNames] = useState([""]);
 
-  // Function to add a new controller field
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
-  function addDirectory() {
-    const newList = [...directoryName, ""];
-    setDirectoryName(newList);
-  }
+  // Add field functions
+  const addControllerField = () => {
+    setControllerNames([...controllerNames, ""]);
+  };
 
-  function addControllerField() {
-    const newList = [...controllerNames, ""];
-    setControllerNames(newList);
-  }
+  const addMiddlewareField = () => {
+    setMiddlewareNames([...middlewareNames, ""]);
+  };
 
-  // Function to add a new middleware field
-  function addMiddlewareField() {
-    const newList = [...middlewareNames, ""];
-    setMiddlewareNames(newList);
-  }
+  const addModelField = () => {
+    setModelNames([...modelNames, ""]);
+  };
 
-  // Function to add a new model field
-  function addModelField() {
-    const newList = [...modelNames, ""];
-    setModelNames(newList);
-  }
+  const addSchemaField = () => {
+    setSchemaNames([...schemaNames, ""]);
+  };
 
-  // Function to add a new route field
-  function addRouteField() {
-    const newList = [...routeNames, ""];
-    setRouteNames(newList);
-  }
+  const addUtilField = () => {
+    setUtilNames([...utilNames, ""]);
+  };
 
-  // Function to add a new schema field
-  function addSchemaField() {
-    const newList = [...schemaNames, ""];
-    setSchemaNames(newList);
-  }
-
-  // Function to add a new util field
-  function addUtilField() {
-    const newList = [...utilNames, ""];
-    setUtilNames(newList);
-  }
-
-  // Function to remove a controller field
-  function removeControllerField(indexToRemove: number) {
+  // Remove field functions
+  const removeControllerField = (index: number) => {
     if (controllerNames.length > 1) {
-      const newList = controllerNames.filter(
-        (_, index: number) => index !== indexToRemove
-      );
+      const newList = controllerNames.filter((_, i) => i !== index);
       setControllerNames(newList);
     }
-  }
+  };
 
-  // Function to remove a middleware field
-  function removeMiddlewareField(indexToRemove: number) {
+  const removeMiddlewareField = (index: number) => {
     if (middlewareNames.length > 1) {
-      const newList = middlewareNames.filter(
-        (_, index: number) => index !== indexToRemove
-      );
+      const newList = middlewareNames.filter((_, i) => i !== index);
       setMiddlewareNames(newList);
     }
-  }
+  };
 
-  // Function to remove a model field
-  function removeModelField(indexToRemove: number) {
+  const removeModelField = (index: number) => {
     if (modelNames.length > 1) {
-      const newList = modelNames.filter(
-        (_, index: number) => index !== indexToRemove
-      );
+      const newList = modelNames.filter((_, i) => i !== index);
       setModelNames(newList);
     }
-  }
+  };
 
-  // Function to remove a route field
-  function removeRouteField(indexToRemove: number) {
-    if (routeNames.length > 1) {
-      const newList = routeNames.filter(
-        (_, index: number) => index !== indexToRemove
-      );
-      setRouteNames(newList);
-    }
-  }
-
-  // Function to remove a schema field
-  function removeSchemaField(indexToRemove: number) {
+  const removeSchemaField = (index: number) => {
     if (schemaNames.length > 1) {
-      const newList = schemaNames.filter(
-        (_, index: number) => index !== indexToRemove
-      );
+      const newList = schemaNames.filter((_, i) => i !== index);
       setSchemaNames(newList);
     }
-  }
+  };
 
-  // Function to remove a util field
-  function removeUtilField(indexToRemove: number) {
+  const removeUtilField = (index: number) => {
     if (utilNames.length > 1) {
-      const newList = utilNames.filter(
-        (_, index: number) => index !== indexToRemove //1 !== 1 false, if condition runs, filter only accept the false condition
-      );
+      const newList = utilNames.filter((_, i) => i !== index);
       setUtilNames(newList);
     }
-  }
+  };
 
-  // Function to update a controller name
-  function updateControllerName(index: number, newValue: string) {
+  // Update field functions
+  const updateControllerName = (index: number, value: string) => {
     const newList = [...controllerNames];
-    newList[index] = newValue;
+    newList[index] = value;
     setControllerNames(newList);
-  }
+  };
 
-  // Function to update a middleware name
-  function updateMiddlewareName(index: number, newValue: string) {
+  const updateMiddlewareName = (index: number, value: string) => {
     const newList = [...middlewareNames];
-    newList[index] = newValue;
+    newList[index] = value;
     setMiddlewareNames(newList);
-  }
+  };
 
-  // Function to update a model name
-  function updateModelName(index: number, newValue: string) {
+  const updateModelName = (index: number, value: string) => {
     const newList = [...modelNames];
-    newList[index] = newValue;
+    newList[index] = value;
     setModelNames(newList);
-  }
+  };
 
-  // Function to update a route name
-  function updateRouteName(index: number, newValue: string) {
-    const newList = [...routeNames];
-    newList[index] = newValue;
-    setRouteNames(newList);
-  }
-
-  // Function to update a schema name
-  function updateSchemaName(index: number, newValue: string) {
+  const updateSchemaName = (index: number, value: string) => {
     const newList = [...schemaNames];
-    newList[index] = newValue;
+    newList[index] = value;
     setSchemaNames(newList);
-  }
+  };
 
-  // Function to update a util name
-  function updateUtilName(index: number, newValue: string) {
+  const updateUtilName = (index: number, value: string) => {
     const newList = [...utilNames];
-    newList[index] = newValue;
+    newList[index] = value;
     setUtilNames(newList);
-  }
+  };
 
-  // Function to generate and download the backend
-  function generateBackend() {
-    // Collect all the data
-    const allData = {
-      directory: directoryName.filter((name) => name.trim() !== ""),
-      controllers: controllerNames.filter((name) => name.trim() !== ""),
-      middlewares: middlewareNames.filter((name) => name.trim() !== ""),
-      models: modelNames.filter((name) => name.trim() !== ""),
-      routes: routeNames.filter((name) => name.trim() !== ""),
-      schemas: schemaNames.filter((name) => name.trim() !== ""),
-      utils: utilNames.filter((name) => name.trim() !== ""),
-    };
-
-    console.log("Generating backend with:", allData);
-
-    // Simulate file download
-    const fakeFile = new Blob(["Backend files would be here"], {
-      type: "application/zip",
-    });
-    const downloadLink = document.createElement("a");
-    downloadLink.href = window.URL.createObjectURL(fakeFile);
-    downloadLink.download = "backend.zip";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  }
-
-  const handleformSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await axios.post("http://localhost:3000/api/generate", {
-      directoryName,
-      controllerNames,
-      middlewareNames,
-      modelNames,
-      routeNames,
-      schemaNames,
-      utilNames,
-    });
+    // Set loading state
+    setIsLoading(true);
+
+    try {
+      // Filter out empty values and join with commas for backend
+      const controllerName = controllerNames
+        .filter((name) => name.trim() !== "")
+        .join(",");
+      const middlewareName = middlewareNames
+        .filter((name) => name.trim() !== "")
+        .join(",");
+      const modelName = modelNames
+        .filter((name) => name.trim() !== "")
+        .join(",");
+      const schemaName = schemaNames
+        .filter((name) => name.trim() !== "")
+        .join(",");
+      const utilName = utilNames.filter((name) => name.trim() !== "").join(",");
+
+      const response = await axios.post(
+        "http://localhost:3000/generate",
+        {
+          directoryName,
+          controllerFileName: controllerName,
+          middlewareFileName: middlewareName,
+          modelFileName: modelName,
+          routeFileName: controllerName, // Using controller name for route
+          schemaFileName: schemaName,
+          utilFileName: utilName,
+        },
+        {
+          responseType: "blob", // Important for file download
+        }
+      );
+
+      // Create download link
+      const url = window.URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${directoryName}.zip`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      // alert("Backend generated successfully! Check your downloads folder.");
+    } catch (error) {
+      console.error("Error generating backend:", error);
+      alert("Error generating backend. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Title */}
-        <div className="text-center  mb-8">
+        <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-black mb-2">
             Backend Generator
           </h1>
@@ -212,11 +176,11 @@ function App() {
 
         {/* Main Form */}
         <form
-          onSubmit={handleformSubmit}
+          onSubmit={handleFormSubmit}
           className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
         >
-          <div className="space-y-6 ">
-            {/* directory secction */}
+          <div className="space-y-6">
+            {/* Directory Section - Single field */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Code className="w-4 h-4 text-gray-600" />
@@ -224,22 +188,18 @@ function App() {
                   Root Directory Name
                 </label>
               </div>
-              <div className="space-y-2">
-                {/* directory input field */}
-
-                <div className="flex  items-center gap-2">
-                  <input
-                    type="text"
-                    placeholder="Enter root direcotory name..."
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
-                                 placeholder:text-gray-400 focus:outline-none focus:ring-2 
-                                 focus:ring-black focus:border-black transition-colors"
-                  />
-                </div>
-              </div>
+              <input
+                type="text"
+                value={directoryName}
+                onChange={(e) => setDirectoryName(e.target.value)}
+                placeholder="Enter root directory name..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
+                           placeholder:text-gray-400 focus:outline-none focus:ring-2 
+                           focus:ring-black focus:border-black transition-colors"
+                required
+                disabled={isLoading}
+              />
             </div>
-
-            
 
             {/* Controller Section */}
             <div className="space-y-3">
@@ -250,9 +210,8 @@ function App() {
                 </label>
               </div>
               <div className="space-y-2">
-                {/* controller input field */}
                 {controllerNames.map((name, index) => (
-                  <div key={index} className="flex  items-center gap-2">
+                  <div key={index} className="flex items-center gap-2">
                     <input
                       type="text"
                       value={name}
@@ -262,20 +221,25 @@ function App() {
                       placeholder="Enter controller name..."
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
                                  placeholder:text-gray-400 focus:outline-none focus:ring-2 
-                                 focus:ring-black focus:border-black transition-colors"
+                                 focus:ring-black focus:border-black transition-colors disabled:opacity-50"
+                      disabled={isLoading}
                     />
                     <button
+                      type="button"
                       onClick={addControllerField}
                       className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                 rounded-md transition-colors border border-gray-300"
+                                 rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                      disabled={isLoading}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                     {controllerNames.length > 1 && (
                       <button
+                        type="button"
                         onClick={() => removeControllerField(index)}
-                        className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                   rounded-md transition-colors border border-gray-300"
+                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 
+                                   rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                        disabled={isLoading}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -305,20 +269,25 @@ function App() {
                       placeholder="Enter middleware name..."
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
                                  placeholder:text-gray-400 focus:outline-none focus:ring-2 
-                                 focus:ring-black focus:border-black transition-colors"
+                                 focus:ring-black focus:border-black transition-colors disabled:opacity-50"
+                      disabled={isLoading}
                     />
                     <button
+                      type="button"
                       onClick={addMiddlewareField}
                       className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                 rounded-md transition-colors border border-gray-300"
+                                 rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                      disabled={isLoading}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                     {middlewareNames.length > 1 && (
                       <button
+                        type="button"
                         onClick={() => removeMiddlewareField(index)}
-                        className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                   rounded-md transition-colors border border-gray-300"
+                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 
+                                   rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                        disabled={isLoading}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -346,61 +315,25 @@ function App() {
                       placeholder="Enter model name..."
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
                                  placeholder:text-gray-400 focus:outline-none focus:ring-2 
-                                 focus:ring-black focus:border-black transition-colors"
+                                 focus:ring-black focus:border-black transition-colors disabled:opacity-50"
+                      disabled={isLoading}
                     />
                     <button
+                      type="button"
                       onClick={addModelField}
                       className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                 rounded-md transition-colors border border-gray-300"
+                                 rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                      disabled={isLoading}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                     {modelNames.length > 1 && (
                       <button
+                        type="button"
                         onClick={() => removeModelField(index)}
-                        className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                   rounded-md transition-colors border border-gray-300"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Route Section */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Code className="w-4 h-4 text-gray-600" />
-                <label className="text-sm font-medium text-black">
-                  Route Names
-                </label>
-              </div>
-              <div className="space-y-2">
-                {routeNames.map((name, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => updateRouteName(index, e.target.value)}
-                      placeholder="Enter route name..."
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
-                                 placeholder:text-gray-400 focus:outline-none focus:ring-2 
-                                 focus:ring-black focus:border-black transition-colors"
-                    />
-                    <button
-                      onClick={addRouteField}
-                      className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                 rounded-md transition-colors border border-gray-300"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                    {routeNames.length > 1 && (
-                      <button
-                        onClick={() => removeRouteField(index)}
-                        className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                   rounded-md transition-colors border border-gray-300"
+                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 
+                                   rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                        disabled={isLoading}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -428,20 +361,25 @@ function App() {
                       placeholder="Enter schema name..."
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
                                  placeholder:text-gray-400 focus:outline-none focus:ring-2 
-                                 focus:ring-black focus:border-black transition-colors"
+                                 focus:ring-black focus:border-black transition-colors disabled:opacity-50"
+                      disabled={isLoading}
                     />
                     <button
+                      type="button"
                       onClick={addSchemaField}
                       className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                 rounded-md transition-colors border border-gray-300"
+                                 rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                      disabled={isLoading}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                     {schemaNames.length > 1 && (
                       <button
+                        type="button"
                         onClick={() => removeSchemaField(index)}
-                        className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                   rounded-md transition-colors border border-gray-300"
+                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 
+                                   rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                        disabled={isLoading}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -469,20 +407,25 @@ function App() {
                       placeholder="Enter utility name..."
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
                                  placeholder:text-gray-400 focus:outline-none focus:ring-2 
-                                 focus:ring-black focus:border-black transition-colors"
+                                 focus:ring-black focus:border-black transition-colors disabled:opacity-50"
+                      disabled={isLoading}
                     />
                     <button
+                      type="button"
                       onClick={addUtilField}
                       className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                 rounded-md transition-colors border border-gray-300"
+                                 rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                      disabled={isLoading}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                     {utilNames.length > 1 && (
                       <button
+                        type="button"
                         onClick={() => removeUtilField(index)}
-                        className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
-                                   rounded-md transition-colors border border-gray-300"
+                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 
+                                   rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                        disabled={isLoading}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -495,14 +438,24 @@ function App() {
             {/* Generate Button */}
             <div className="pt-4 border-t border-gray-200">
               <button
-                onClick={generateBackend}
-                className="w-full bg-black hover:bg-gray-800 text-white font-medium 
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white font-medium 
                            py-3 px-4 rounded-md shadow-sm transition-colors duration-200
                            flex items-center justify-center gap-2 focus:outline-none 
-                           focus:ring-2 focus:ring-black focus:ring-offset-2"
+                           focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:cursor-not-allowed"
               >
-                <Download className="w-4 h-4" />
-                Generate & Download Backend
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Generating Backend...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4" />
+                    Generate & Download Backend
+                  </>
+                )}
               </button>
             </div>
           </div>
