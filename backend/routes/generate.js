@@ -1,9 +1,11 @@
-const bodyParser = require("body-parser");
 const fs = require("fs-extra");
 const path = require("path");
 const archiver = require("archiver");
 
-app.post("/generate", async (req, res) => {
+const { Router } = require("express");
+const generateRoute = Router();
+
+generateRoute.post("/generate", async (req, res) => {
   const {
     directoryName,
     controllerFolderName,
@@ -92,12 +94,19 @@ app.post("/generate", async (req, res) => {
     });
 
     // node_modules content
+     archive.directory(nodeModulesPath, `${folderName}/node_modules`);
     const nodeModuleDir = path.join(__dirname, "node_modules");
     archive.directory(nodeModuleDir, `${directoryName}/node_modules`);
 
+    const config_fileContent = fs.readFileSync(
+      path.join(__dirname, "../readBackend/config.js")
+    );
+    archive.append(config_fileContent, { name: `${directoryName}/config.js` });
     await archive.finalize();
   } catch (err) {
     console.error("Error generating ZIP file:", err);
     res.status(500).json({ error: "Error generating file." });
   }
 });
+
+module.exports = { generateRoute };

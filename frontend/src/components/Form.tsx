@@ -4,6 +4,7 @@ import axios from "axios";
 
 function App() {
   // Start with one empty field for each type
+  const [directoryName, setDirectoryName] = useState([""]);
   const [controllerNames, setControllerNames] = useState([""]);
   const [middlewareNames, setMiddlewareNames] = useState([""]);
   const [modelNames, setModelNames] = useState([""]);
