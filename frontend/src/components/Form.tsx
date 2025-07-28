@@ -10,6 +10,7 @@ function App() {
   const [controllerNames, setControllerNames] = useState([""]);
   const [middlewareNames, setMiddlewareNames] = useState([""]);
   const [modelNames, setModelNames] = useState([""]);
+  const [routeNames, setRouteNames] = useState([""]);
   const [schemaNames, setSchemaNames] = useState([""]);
   const [utilNames, setUtilNames] = useState([""]);
 
@@ -27,6 +28,10 @@ function App() {
 
   const addModelField = () => {
     setModelNames([...modelNames, ""]);
+  };
+
+  const addRouteField = () => {
+    setRouteNames([...routeNames, ""]);
   };
 
   const addSchemaField = () => {
@@ -56,6 +61,13 @@ function App() {
     if (modelNames.length > 1) {
       const newList = modelNames.filter((_, i) => i !== index);
       setModelNames(newList);
+    }
+  };
+
+  const removeRouteField = (index: number) => {
+    if (routeNames.length > 1) {
+      const newList = routeNames.filter((_, i) => i !== index);
+      setRouteNames(newList);
     }
   };
 
@@ -92,6 +104,12 @@ function App() {
     setModelNames(newList);
   };
 
+  const updateRouteName = (index: number, value: string) => {
+    const newList = [...routeNames];
+    newList[index] = value;
+    setRouteNames(newList);
+  };
+
   const updateSchemaName = (index: number, value: string) => {
     const newList = [...schemaNames];
     newList[index] = value;
@@ -121,6 +139,9 @@ function App() {
       const modelName = modelNames
         .filter((name) => name.trim() !== "")
         .join(",");
+      const routeName = routeNames
+        .filter((name) => name.trim() !== "")
+        .join(",");
       const schemaName = schemaNames
         .filter((name) => name.trim() !== "")
         .join(",");
@@ -133,7 +154,7 @@ function App() {
           controllerFileName: controllerName,
           middlewareFileName: middlewareName,
           modelFileName: modelName,
-          routeFileName: controllerName, // Using controller name for route
+          routeFileName: routeName,
           schemaFileName: schemaName,
           utilFileName: utilName,
         },
@@ -331,6 +352,52 @@ function App() {
                       <button
                         type="button"
                         onClick={() => removeModelField(index)}
+                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 
+                                   rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                        disabled={isLoading}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Route Section */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Code className="w-4 h-4 text-gray-600" />
+                <label className="text-sm font-medium text-black">
+                  Route Names
+                </label>
+              </div>
+              <div className="space-y-2">
+                {routeNames.map((name, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => updateRouteName(index, e.target.value)}
+                      placeholder="Enter route name..."
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm
+                                 placeholder:text-gray-400 focus:outline-none focus:ring-2 
+                                 focus:ring-black focus:border-black transition-colors disabled:opacity-50"
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="button"
+                      onClick={addRouteField}
+                      className="p-2 text-black hover:text-gray-700 hover:bg-gray-100 
+                                 rounded-md transition-colors border border-gray-300 disabled:opacity-50"
+                      disabled={isLoading}
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                    {routeNames.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeRouteField(index)}
                         className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 
                                    rounded-md transition-colors border border-gray-300 disabled:opacity-50"
                         disabled={isLoading}
