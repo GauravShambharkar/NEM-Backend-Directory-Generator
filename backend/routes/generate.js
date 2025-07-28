@@ -33,83 +33,111 @@ generateRoute.post("/generate", async (req, res) => {
     // Pipe the archive directly to the response only
     archive.pipe(res);
 
-    // Only add files if they have names and the template files exist
+    // Add controller files
     if (
       controllerFileName &&
       fs.existsSync(
         path.join(__dirname, "../readBackend/controllers/controller.js")
       )
     ) {
+      const controllerFileNames = controllerFileName.split(",");
       const controller_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/controllers/controller.js")
       );
-      archive.append(controller_fileContent, {
-        name: `${directoryName}/controllers/${controllerFileName}.js`,
+
+      controllerFileNames.forEach((fileName) => {
+        archive.append(controller_fileContent, {
+          name: `${directoryName}/controllers/${fileName.trim()}.js`,
+        });
       });
     }
 
+    // Add middleware files
     if (
       middlewareFileName &&
       fs.existsSync(
         path.join(__dirname, "../readBackend/middleware/middleware.js")
       )
     ) {
+      const middlewareFileNames = middlewareFileName.split(",");
       const middleware_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/middleware/middleware.js")
       );
-      archive.append(middleware_fileContent, {
-        name: `${directoryName}/middleware/${middlewareFileName}.js`,
+
+      middlewareFileNames.forEach((fileName) => {
+        archive.append(middleware_fileContent, {
+          name: `${directoryName}/middleware/${fileName.trim()}.js`,
+        });
       });
     }
 
+    // Add model files
     if (
       modelFileName &&
       fs.existsSync(path.join(__dirname, "../readBackend/Models/model.js"))
     ) {
+      const modelFileNames = modelFileName.split(",");
       const model_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/Models/model.js")
       );
-      archive.append(model_fileContent, {
-        name: `${directoryName}/Models/${modelFileName}.js`,
+
+      modelFileNames.forEach((fileName) => {
+        archive.append(model_fileContent, {
+          name: `${directoryName}/Models/${fileName.trim()}.js`,
+        });
       });
     }
 
+    // Add schema files
     if (
       schemaFileName &&
       fs.existsSync(
         path.join(__dirname, "../readBackend/Models/schemas/schema.js")
       )
     ) {
+      const schemaFileNames = schemaFileName.split(",");
       const schema_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/Models/schemas/schema.js")
       );
-      archive.append(schema_fileContent, {
-        name: `${directoryName}/Models/schemas/${schemaFileName}.js`,
+
+      schemaFileNames.forEach((fileName) => {
+        archive.append(schema_fileContent, {
+          name: `${directoryName}/Models/schemas/${fileName.trim()}.js`,
+        });
       });
     }
 
+    // Add route files
     if (
       routeFileName &&
       fs.existsSync(path.join(__dirname, "../readBackend/routes/_route.js"))
     ) {
+      const routeFileNames = routeFileName.split(",");
       const route_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/routes/_route.js")
       );
-      archive.append(route_fileContent, {
-        name: `${directoryName}/routes/${routeFileName}.js`,
+
+      routeFileNames.forEach((fileName) => {
+        archive.append(route_fileContent, {
+          name: `${directoryName}/routes/${fileName.trim()}.js`,
+        });
       });
     }
 
-    // util.js file content
+    // Add utility files
     if (
       utilFileName &&
       fs.existsSync(path.join(__dirname, "../readBackend/utils.js"))
     ) {
+      const utilFileNames = utilFileName.split(",");
       const util_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/utils.js")
       );
-      archive.append(util_fileContent, {
-        name: `${directoryName}/utils/${utilFileName}.js`,
+
+      utilFileNames.forEach((fileName) => {
+        archive.append(util_fileContent, {
+          name: `${directoryName}/utils/${fileName.trim()}.js`,
+        });
       });
     }
 
