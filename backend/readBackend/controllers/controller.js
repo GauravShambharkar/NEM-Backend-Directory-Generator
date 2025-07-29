@@ -1,4 +1,3 @@
-const { default: axios } = require("axios");
 const { userModel } = require("../Models/model");
 const bcrypt = require("bcrypt");
 const { user_jwt_secret } = require("../config");

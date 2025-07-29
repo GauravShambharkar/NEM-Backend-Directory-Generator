@@ -32,10 +32,10 @@ generateRoute.post("/generate", async (req, res) => {
     const serverFileContent = await fs.readFileSync(
       path.join(__dirname, "../readBackend/server.js")
     );
-    archive.append(serverFileContent, `${directoryName}/server.js`);
+    archive.append(serverFileContent, { name: `${directoryName}/server.js` });
 
-    archive.append("", `${directoryName}/.gitignore`);
-    archive.append("", `${directoryName}/.env`);
+    archive.append(" ", { name: `${directoryName}/.gitignore` });
+    archive.append(" ", { name: `${directoryName}/.env` });
 
     // Add controller files
     if (
@@ -44,12 +44,12 @@ generateRoute.post("/generate", async (req, res) => {
         path.join(__dirname, "../readBackend/controllers/controller.js")
       )
     ) {
-      const controllerFileNames = controllerFileName.split(",");
+      // const controllerFileNames = controllerFileName.split(",");
       const controller_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/controllers/controller.js")
       );
 
-      controllerFileNames.forEach((fileName) => {
+      controllerFileName.forEach((fileName) => {
         archive.append(controller_fileContent, {
           name: `${directoryName}/controllers/${fileName.trim()}.js`,
         });
@@ -63,12 +63,12 @@ generateRoute.post("/generate", async (req, res) => {
         path.join(__dirname, "../readBackend/middleware/middleware.js")
       )
     ) {
-      const middlewareFileNames = middlewareFileName.split(",");
+      // const middlewareFileNames = middlewareFileName.split(",");
       const middleware_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/middleware/middleware.js")
       );
 
-      middlewareFileNames.forEach((fileName) => {
+      middlewareFileName.forEach((fileName) => {
         archive.append(middleware_fileContent, {
           name: `${directoryName}/middleware/${fileName.trim()}.js`,
         });
@@ -80,12 +80,12 @@ generateRoute.post("/generate", async (req, res) => {
       modelFileName &&
       fs.existsSync(path.join(__dirname, "../readBackend/Models/model.js"))
     ) {
-      const modelFileNames = modelFileName.split(",");
+      // const modelFileNames = modelFileName.split(",");
       const model_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/Models/model.js")
       );
 
-      modelFileNames.forEach((fileName) => {
+      modelFileName.forEach((fileName) => {
         archive.append(model_fileContent, {
           name: `${directoryName}/Models/${fileName.trim()}.js`,
         });
@@ -99,12 +99,12 @@ generateRoute.post("/generate", async (req, res) => {
         path.join(__dirname, "../readBackend/Models/schemas/schema.js")
       )
     ) {
-      const schemaFileNames = schemaFileName.split(",");
+      // const schemaFileNames = schemaFileName.split(",");
       const schema_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/Models/schemas/schema.js")
       );
 
-      schemaFileNames.forEach((fileName) => {
+      schemaFileName.forEach((fileName) => {
         archive.append(schema_fileContent, {
           name: `${directoryName}/Models/schemas/${fileName.trim()}.js`,
         });
@@ -116,12 +116,12 @@ generateRoute.post("/generate", async (req, res) => {
       routeFileName &&
       fs.existsSync(path.join(__dirname, "../readBackend/routes/_route.js"))
     ) {
-      const routeFileNames = routeFileName.split(",");
+      // const routeFileNames = routeFileName.split(",");
       const route_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/routes/_route.js")
       );
 
-      routeFileNames.forEach((fileName) => {
+      routeFileName.forEach((fileName) => {
         archive.append(route_fileContent, {
           name: `${directoryName}/routes/${fileName.trim()}.js`,
         });
@@ -133,12 +133,12 @@ generateRoute.post("/generate", async (req, res) => {
       utilFileName &&
       fs.existsSync(path.join(__dirname, "../readBackend/utils.js"))
     ) {
-      const utilFileNames = utilFileName.split(",");
+      // const utilFileNames = utilFileName.split(",");
       const util_fileContent = fs.readFileSync(
         path.join(__dirname, "../readBackend/utils.js")
       );
 
-      utilFileNames.forEach((fileName) => {
+      utilFileName.forEach((fileName) => {
         archive.append(util_fileContent, {
           name: `${directoryName}/utils/${fileName.trim()}.js`,
         });

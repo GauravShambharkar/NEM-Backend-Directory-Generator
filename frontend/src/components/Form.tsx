@@ -5,9 +5,9 @@ import { saveAs } from "file-saver";
 
 function App() {
   // Root directory remains single field
-  const [directoryName, setDirectoryName] = useState("");
-
+  
   // Arrays for multiple fields
+  const [directoryName, setDirectoryName] = useState("");
   const [controllerNames, setControllerNames] = useState([""]);
   const [middlewareNames, setMiddlewareNames] = useState([""]);
   const [modelNames, setModelNames] = useState([""]);
@@ -131,33 +131,33 @@ function App() {
 
     try {
       // Filter out empty values and join with commas for backend
-      const controllerName = controllerNames
-        .filter((name) => name.trim() !== "")
-        .join(",");
-      const middlewareName = middlewareNames
-        .filter((name) => name.trim() !== "")
-        .join(",");
-      const modelName = modelNames
-        .filter((name) => name.trim() !== "")
-        .join(",");
-      const routeName = routeNames
-        .filter((name) => name.trim() !== "")
-        .join(",");
-      const schemaName = schemaNames
-        .filter((name) => name.trim() !== "")
-        .join(",");
-      const utilName = utilNames.filter((name) => name.trim() !== "").join(",");
+      // const controllerName = controllerNames
+      //   .filter((name) => name.trim() !== "")
+      //   .join(",");
+      // const middlewareName = middlewareNames
+      //   .filter((name) => name.trim() !== "")
+      //   .join(",");
+      // const modelName = modelNames
+      //   .filter((name) => name.trim() !== "")
+      //   .join(",");
+      // const routeName = routeNames
+      //   .filter((name) => name.trim() !== "")
+      //   .join(",");
+      // const schemaName = schemaNames
+      //   .filter((name) => name.trim() !== "")
+      //   .join(",");
+      // const utilName = utilNames.filter((name) => name.trim() !== "").join(",");
 
       const response = await axios.post(
         "http://localhost:3000/generate",
         {
           directoryName,
-          controllerFileName: controllerName,
-          middlewareFileName: middlewareName,
-          modelFileName: modelName,
-          routeFileName: routeName,
-          schemaFileName: schemaName,
-          utilFileName: utilName,
+          controllerFileName: controllerNames,
+          middlewareFileName: middlewareNames,
+          modelFileName: modelNames,
+          routeFileName: routeNames,
+          schemaFileName: schemaNames,
+          utilFileName: utilNames,
         },
         {
           responseType: "blob", // Important for file download
