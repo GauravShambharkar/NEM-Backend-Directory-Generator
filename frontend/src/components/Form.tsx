@@ -187,7 +187,7 @@ function App() {
             Backend Generator
           </h1>
           <p className="text-gray-600">
-            Generate your backend structure with custom components
+            Generate your MERN backend structure with custom components
           </p>
         </div>
 

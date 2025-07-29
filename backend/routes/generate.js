@@ -29,6 +29,14 @@ generateRoute.post("/generate", async (req, res) => {
     // Pipe the archive directly to the response only
     archive.pipe(res);
 
+    const serverFileContent = await fs.readFileSync(
+      path.join(__dirname, "../readBackend/server.js")
+    );
+    archive.append(serverFileContent, `${directoryName}/server.js`);
+
+    archive.append("", `${directoryName}/.gitignore`);
+    archive.append("", `${directoryName}/.env`);
+
     // Add controller files
     if (
       controllerFileName &&
