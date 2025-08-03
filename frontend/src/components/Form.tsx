@@ -4,9 +4,6 @@ import axios from "axios";
 import { saveAs } from "file-saver";
 
 function App() {
-  // Root directory remains single field
-  
-  // Arrays for multiple fields
   const [directoryName, setDirectoryName] = useState("");
   const [controllerNames, setControllerNames] = useState([""]);
   const [middlewareNames, setMiddlewareNames] = useState([""]);
@@ -15,7 +12,6 @@ function App() {
   const [schemaNames, setSchemaNames] = useState([""]);
   const [utilNames, setUtilNames] = useState([""]);
 
-  // Loading state
   const [isLoading, setIsLoading] = useState(false);
 
   // Add field functions
@@ -126,7 +122,6 @@ function App() {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Set loading state
     setIsLoading(true);
 
     try {
@@ -163,8 +158,6 @@ function App() {
           responseType: "blob", // Important for file download
         }
       );
-
-      
 
       // Create download link
       saveAs(response.data, `${directoryName}.zip`);
@@ -511,7 +504,7 @@ function App() {
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Generating Backend...
+                    Generating Backend zip file...
                   </>
                 ) : (
                   <>

@@ -14,10 +14,9 @@ app.use(express.json());
 
 app.use("/", generateRoute);
 
-
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  if (port) console.log(`Server running on port ${port}`);
+app.listen(port, async () => {
+  if (port) await console.log(`Server running on port ${port}`);
   else console.error("Failed to start server: PORT not defined");
 });
