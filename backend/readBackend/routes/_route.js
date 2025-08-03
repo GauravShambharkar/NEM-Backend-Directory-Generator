@@ -1,20 +1,19 @@
 const express = require("express");
-const { Router } = require("express");
-const YOUR_ROUTE_NAME = Router();
-const mongoose = require("mongoose");
-const {  } = require("../Models/");
 
-// middleware
-const {} = require("../middleware/middleware");
-// controllers
-const {} = require("../controllers/controller");
-
-
+const routeName1 = express.Router();
+const routeName2 = express.Router();
+const routeName3 = express.Router();
+const routeName4 = express.Router();
 // user route
 
-route.get("/read", async (req, res) => {});
-route.post("/post");
-route.put("/update");
-route.delete("/delete");
+routeName1.get("/read", async (req, res) => {});
+routeName2.post("/post");
+routeName3.put("/update");
+routeName4.delete("/delete");
 
-module.exports = yourRouteName;
+module.exports = {
+  routeName1,
+  routeName2,
+  routeName3,
+  routeName4,
+};
