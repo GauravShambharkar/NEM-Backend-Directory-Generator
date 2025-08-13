@@ -92,6 +92,14 @@ generateRoute.post("/generate", async (req, res) => {
       });
     }
 
+    // add readme file
+
+    const readmeFile_Path = path.join(__dirname, "../readBackend/readme.md");
+    const readFile_Content = fs.readFileSync(readmeFile_Path);
+    await archive.append(readFile_Content, {
+      name: `${directoryName}/readme.md`,
+    });
+
     // Add schema files
     if (
       schemaFileName &&

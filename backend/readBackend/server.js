@@ -18,13 +18,12 @@ const { METHODS } = require("node:http");
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const routeName1 = require("./routes/_route");
-const routeName2 = require("./routes/_route");
-const routeName3 = require("./routes/_route");
+const { routeName } = require("./routes/_route");
 
-app.use("/user", routeName1);
-app.use("/admin", routeName2);
-app.use("/course", routeName3);
+app.use("/user", routeName);
+app.use("/admin", routeName);
+app.use("/course", routeName);
+app.use("/delete", routeName);
 
 const port = process.env.port || 3000;
 app.listen(port, () => {
