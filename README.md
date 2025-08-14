@@ -2,6 +2,11 @@
 
 A tool to generate custom Node.js/Express backend projects with predefined templates.
 
+# Demo
+
+https://github.com/user-attachments/assets/b4fd3069-edf9-4588-a67f-e9c3122e0487
+
+
 ## Features
 
 - **Simple Form Interface**: Easy-to-use React frontend for configuring backend components
