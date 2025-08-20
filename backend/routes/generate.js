@@ -189,7 +189,7 @@ generateRoute.post("/generate", async (req, res) => {
     // node_modules content
     const nodeModuleDir = path.join(__dirname, "../node_modules");
     if (fs.existsSync(nodeModuleDir)) {
-      archive.directory(nodeModuleDir, `${directoryName}/node_modules`);
+      await archive.directory(nodeModuleDir, `${directoryName}/node_modules`);
     }
 
     // config.js content

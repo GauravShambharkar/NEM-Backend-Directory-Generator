@@ -174,7 +174,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white py-8 px-4">
-      <Toaster richColors closeButton position="bottom-center" />
+      <Toaster visibleToasts={3} position="bottom-center" />
       <div className="max-w-2xl mx-auto">
         {/* Title */}
         <div className="text-center mb-8">
