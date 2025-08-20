@@ -29,6 +29,17 @@ generateRoute.post("/generate", async (req, res) => {
     // Pipe the archive directly to the response only
     archive.pipe(res);
 
+    // listen for archiver errors
+    // archive.on("error", (err) => {
+    //   console.error("Archiver error:", err);
+    //   res.status(500).end();
+    // });
+
+    // // optional: log when done
+    // archive.on("end", () => {
+    //   console.log("Archive finalized. Total bytes:", archive.pointer());
+    // });
+
     const serverFileContent = await fs.readFileSync(
       path.join(__dirname, "../readBackend/server.js")
     );
@@ -96,7 +107,7 @@ generateRoute.post("/generate", async (req, res) => {
 
     const readmeFile_Path = path.join(__dirname, "../readBackend/readme.md");
     const readFile_Content = fs.readFileSync(readmeFile_Path);
-    await archive.append(readFile_Content, {
+    archive.append(readFile_Content, {
       name: `${directoryName}/readme.md`,
     });
 
@@ -191,7 +202,7 @@ generateRoute.post("/generate", async (req, res) => {
       });
     }
 
-    await archive.finalize();
+    archive.finalize();
 
     console.log(
       `ZIP file generated successfully for directory: ${directoryName}`

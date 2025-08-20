@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Download, Code, Plus, Trash2, Loader2 } from "lucide-react";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import { Toaster, toast } from "sonner";
 
 function App() {
   const [directoryName, setDirectoryName] = useState("");
@@ -146,7 +147,7 @@ function App() {
       const response = await axios.post(
         "http://localhost:3000/generate",
         {
-          directoryName,
+          directoryName: directoryName,
           controllerFileName: controllerNames,
           middlewareFileName: middlewareNames,
           modelFileName: modelNames,
@@ -161,7 +162,7 @@ function App() {
 
       // Create download link
       saveAs(response.data, `${directoryName}.zip`);
-
+      toast.success(`${directoryName} succesfully generated`);
       // alert("Backend generated successfully! Check your downloads folder.");
     } catch (error) {
       console.error("Error generating backend:", error);
@@ -173,6 +174,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white py-8 px-4">
+      <Toaster richColors closeButton position="bottom-center" />
       <div className="max-w-2xl mx-auto">
         {/* Title */}
         <div className="text-center mb-8">
